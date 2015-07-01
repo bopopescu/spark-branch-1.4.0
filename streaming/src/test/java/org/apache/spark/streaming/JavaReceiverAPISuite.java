@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import org.apache.spark.storage.StorageLevel;
 import org.apache.spark.streaming.receiver.Receiver;
+import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.spark.api.java.function.Function;
 
 import java.io.BufferedReader;
@@ -68,12 +69,12 @@ public class JavaReceiverAPISuite implements Serializable {
           return v1 + ".";
         }
       });
-      mapped.foreachRDD(new Function<JavaRDD<String>, Void>() {
+      mapped.foreachRDD(new VoidFunction<JavaRDD<String>>() {
         @Override
-        public Void call(JavaRDD<String> rdd) throws Exception {
+        public void  call(JavaRDD<String> rdd) throws Exception {
         long count = rdd.count();
         dataCounter.addAndGet(count);
-        return null;
+
         }
       });
 
