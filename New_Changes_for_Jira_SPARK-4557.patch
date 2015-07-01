@@ -1,0 +1,65 @@
+Index: streaming/src/main/scala/org/apache/spark/streaming/api/java/JavaDStreamLike.scala
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- streaming/src/main/scala/org/apache/spark/streaming/api/java/JavaDStreamLike.scala	(revision 3e8684167f463a775b318f53cc466e70c306b703)
++++ streaming/src/main/scala/org/apache/spark/streaming/api/java/JavaDStreamLike.scala	(revision )
+@@ -28,7 +28,7 @@
+ import org.apache.spark.api.java.{JavaPairRDD, JavaRDD, JavaRDDLike}
+ import org.apache.spark.api.java.JavaPairRDD._
+ import org.apache.spark.api.java.JavaSparkContext.fakeClassTag
+-import org.apache.spark.api.java.function.{Function => JFunction, Function2 => JFunction2, Function3 => JFunction3, _}
++import org.apache.spark.api.java.function.{Function => JFunction, Function2 => JFunction2, Function3 => JFunction3, VoidFunction => JVoidFunction, _}
+ import org.apache.spark.rdd.RDD
+ import org.apache.spark.streaming._
+ import org.apache.spark.streaming.api.java.JavaDStream._
+@@ -292,7 +292,7 @@
+    * @deprecated  As of release 0.9.0, replaced by foreachRDD
+    */
+   @Deprecated
+-  def foreach(foreachFunc: JFunction[R, Void]) {
++  def foreach(foreachFunc: JVoidFunction[R]) {
+     foreachRDD(foreachFunc)
+   }
+ 
+@@ -311,7 +311,7 @@
+    * Apply a function to each RDD in this DStream. This is an output operator, so
+    * 'this' DStream will be registered as an output stream and therefore materialized.
+    */
+-  def foreachRDD(foreachFunc: JFunction[R, Void]) {
++  def foreachRDD(foreachFunc: JVoidFunction[R]) {
+     dstream.foreachRDD(rdd => foreachFunc.call(wrapRDD(rdd)))
+   }
+ 
+Index: streaming/src/test/java/org/apache/spark/streaming/JavaReceiverAPISuite.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- streaming/src/test/java/org/apache/spark/streaming/JavaReceiverAPISuite.java	(revision 3e8684167f463a775b318f53cc466e70c306b703)
++++ streaming/src/test/java/org/apache/spark/streaming/JavaReceiverAPISuite.java	(revision )
+@@ -29,6 +29,7 @@
+ 
+ import org.apache.spark.storage.StorageLevel;
+ import org.apache.spark.streaming.receiver.Receiver;
++import org.apache.spark.api.java.function.VoidFunction;
+ import org.apache.spark.api.java.function.Function;
+ 
+ import java.io.BufferedReader;
+@@ -68,12 +69,12 @@
+           return v1 + ".";
+         }
+       });
+-      mapped.foreachRDD(new Function<JavaRDD<String>, Void>() {
++      mapped.foreachRDD(new VoidFunction<JavaRDD<String>>() {
+         @Override
+-        public Void call(JavaRDD<String> rdd) throws Exception {
++        public void  call(JavaRDD<String> rdd) throws Exception {
+         long count = rdd.count();
+         dataCounter.addAndGet(count);
+-        return null;
++
+         }
+       });
+ 
