@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.spark.storage.StorageLevel;
 import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.api.java.JavaDStream;
@@ -106,9 +107,9 @@ public class JavaKafkaStreamSuite implements Serializable {
     );
 
     words.countByValue().foreachRDD(
-      new Function<JavaPairRDD<String, Long>, Void>() {
+      new VoidFunction<JavaPairRDD<String, Long>>() {
         @Override
-        public Void call(JavaPairRDD<String, Long> rdd) throws Exception {
+        public void call(JavaPairRDD<String, Long> rdd) throws Exception {
           List<Tuple2<String, Long>> ret = rdd.collect();
           for (Tuple2<String, Long> r : ret) {
             if (result.containsKey(r._1())) {
@@ -118,7 +119,7 @@ public class JavaKafkaStreamSuite implements Serializable {
             }
           }
 
-          return null;
+
         }
       }
     );
