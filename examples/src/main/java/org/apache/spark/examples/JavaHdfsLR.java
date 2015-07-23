@@ -57,7 +57,6 @@ public final class JavaHdfsLR {
 
     double[] x;
     double y;
-
   }
 
   static class ParsePoint implements Function<String, DataPoint> {
