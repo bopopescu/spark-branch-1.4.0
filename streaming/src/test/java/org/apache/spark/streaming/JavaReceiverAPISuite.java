@@ -29,8 +29,9 @@ import org.junit.Test;
 
 import org.apache.spark.storage.StorageLevel;
 import org.apache.spark.streaming.receiver.Receiver;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.VoidFunction;
+import org.apache.spark.api.java.function.Function;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Serializable;
@@ -61,7 +62,7 @@ public class JavaReceiverAPISuite implements Serializable {
     try {
       JavaStreamingContext ssc = new JavaStreamingContext("local[2]", "test", new Duration(200));
       JavaReceiverInputDStream<String> input =
-              ssc.receiverStream(new JavaSocketReceiver("localhost", server.port()));
+        ssc.receiverStream(new JavaSocketReceiver("localhost", server.port()));
       JavaDStream<String> mapped = input.map(new Function<String, String>() {
         @Override
         public String call(String v1) throws Exception {
@@ -70,9 +71,9 @@ public class JavaReceiverAPISuite implements Serializable {
       });
       mapped.foreachRDD(new VoidFunction<JavaRDD<String>>() {
         @Override
-        public void call(JavaRDD<String> rdd) throws Exception {
-          long count = rdd.count();
-          dataCounter.addAndGet(count);
+        public void  call(JavaRDD<String> rdd) throws Exception {
+        long count = rdd.count();
+        dataCounter.addAndGet(count);
 
         }
       });
