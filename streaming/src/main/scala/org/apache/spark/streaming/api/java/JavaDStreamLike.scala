@@ -292,7 +292,7 @@ trait JavaDStreamLike[T, This <: JavaDStreamLike[T, This, R], R <: JavaRDDLike[T
    * @deprecated  As of release 0.9.0, replaced by foreachRDD
    */
   @Deprecated
-  def foreach(foreachFunc: JFunction[R,Void]) {
+  def foreach(foreachFunc: JVoidFunction[R]) {
     foreachRDD(foreachFunc)
   }
 
