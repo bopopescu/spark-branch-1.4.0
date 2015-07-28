@@ -29,9 +29,8 @@ import org.junit.Test;
 
 import org.apache.spark.storage.StorageLevel;
 import org.apache.spark.streaming.receiver.Receiver;
-import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.spark.api.java.function.Function;
-
+import org.apache.spark.api.java.function.VoidFunction;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Serializable;
@@ -74,7 +73,6 @@ public class JavaReceiverAPISuite implements Serializable {
         public void  call(JavaRDD<String> rdd) throws Exception {
         long count = rdd.count();
         dataCounter.addAndGet(count);
-
         }
       });
 
